@@ -1,3 +1,6 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAzn2X18AOgN59nc1O_RnHT2AJDRINYu7M",
   authDomain: "sayhiwithme-0000002.firebaseapp.com",
@@ -7,64 +10,58 @@ const firebaseConfig = {
   appId: "1:330846125548:web:f308385a1aa261e06bd4c9",
   databaseURL: "https://sayhiwithme-0000002-default-rtdb.asia-southeast1.firebasedatabase.app/"
 };
-// Mock data for initial view
-let posts = [
-    {
-        id: 1,
-        user: "SayHiWithMe",
-        content: "Welcome to SimplePost! Building this with clean code.",
-        likes: 12,
-        comments: 2
-    }
-];
 
-const feedContainer = document.getElementById('feedContainer');
-const postBtn = document.getElementById('submitPost');
-const postInput = document.getElementById('postInput');
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const postsRef = ref(db, 'posts');
 
-// Function to render posts
-function renderPosts() {
-    feedContainer.innerHTML = '';
-    posts.forEach(post => {
-        const postElement = document.createElement('div');
-        postElement.className = 'post';
-        postElement.innerHTML = `
-            <div class="post-user">@${post.user}</div>
-            <div class="post-content">${post.content}</div>
-            <div class="post-actions">
-                <span onclick="likePost(${post.id})">❤️ ${post.likes}</span>
-                <span>💬 ${post.comments}</span>
+let allPosts = []; 
+
+onValue(postsRef, (snapshot) => {
+    const data = snapshot.val();
+    allPosts = data ? Object.keys(data).map(id => ({ id, ...data[id] })) : [];
+    renderPosts(allPosts);
+});
+
+function renderPosts(postsToRender) {
+    const feed = document.getElementById('feedContainer');
+    feed.innerHTML = '';
+    
+    postsToRender.slice().reverse().forEach(post => {
+        const div = document.createElement('div');
+        div.className = 'post';
+        div.innerHTML = `
+            <div style="display: flex; gap: 10px;">
+                <div class="default-avatar">👤</div> 
+                <div style="flex: 1;">
+                    <div class="post-user">@${post.user || 'Anonymous'}</div>
+                    <div class="post-content">${post.content}</div>
+                </div>
             </div>
         `;
-        feedContainer.prepend(postElement);
+        feed.appendChild(div);
     });
 }
 
-// Handle new post
-postBtn.addEventListener('click', () => {
-    const content = postInput.value.trim();
-    if (content) {
-        const newPost = {
-            id: Date.now(),
-            user: "SayHiWithMe",
-            content: content,
-            likes: 0,
-            comments: 0
-        };
-        posts.push(newPost);
-        postInput.value = '';
-        renderPosts();
-    }
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    const filtered = allPosts.filter(p => 
+        p.content.toLowerCase().includes(term) || 
+        p.user.toLowerCase().includes(term)
+    );
+    renderPosts(filtered);
 });
 
-// Simple like function
-window.likePost = (id) => {
-    const post = posts.find(p => p.id === id);
-    if (post) {
-        post.likes++;
-        renderPosts();
-    }
-};
 
-// Initial render
-renderPosts();
+document.getElementById('submitPost').addEventListener('click', () => {
+    const content = document.getElementById('postInput').value.trim();
+    if (content) {
+        push(postsRef, {
+            user: "SayHiWithMe",
+            content: content,
+            timestamp: Date.now()
+        });
+        document.getElementById('postInput').value = '';
+    }
+});
