@@ -1,0 +1,54 @@
+:root {
+    --primary: #000000;
+    --secondary: #536471;
+    --bg: #ffffff;
+    --border: #eff3f4;
+    --hover: #f7f7f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body { background-color: var(--bg); color: var(--primary); }
+
+.navbar {
+    position: sticky; top: 0; background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+    z-index: 100; padding: 10px 0;
+}
+
+.nav-content {
+    max-width: 1000px; margin: 0 auto; display: flex;
+    justify-content: space-between; align-items: center; padding: 0 20px;
+}
+
+.logo { font-size: 1.5rem; font-weight: 800; text-decoration: none; color: var(--primary); }
+
+.search-container input {
+    background: #eff3f4; border: none; padding: 10px 20px;
+    border-radius: 20px; width: 300px; outline: none;
+}
+
+.container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+
+.create-post-card {
+    border: 1px solid var(--border); padding: 15px; border-radius: 16px; margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%; border: none; resize: none; font-size: 1.2rem;
+    outline: none; margin-bottom: 10px; min-height: 100px;
+}
+
+.card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px; }
+
+.btn-primary { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 700; cursor: pointer; }
+
+/* Post Styling */
+.post {
+    padding: 15px; border-bottom: 1px solid var(--border);
+    transition: 0.2s; cursor: pointer;
+}
+.post:hover { background: var(--hover); }
+.post-user { font-weight: 700; margin-bottom: 5px; }
+.post-content { line-height: 1.5; margin-bottom: 10px; }
+.post-actions { display: flex; gap: 30px; color: var(--secondary); font-size: 0.9rem; }
