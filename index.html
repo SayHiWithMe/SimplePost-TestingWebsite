@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimplePost | Feed</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="logo">SimplePost</a>
+            <div class="search-container">
+                <input type="text" placeholder="Search posts..." id="searchInput">
+            </div>
+            <div class="nav-actions">
+                <a href="profile.html" class="nav-link">Profile</a>
+                <button id="logoutBtn" class="btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="create-post-card">
+            <textarea id="postInput" placeholder="What's on your mind, SayHi?"></textarea>
+            <div class="card-footer">
+                <span class="char-count">0/280</span>
+                <button id="submitPost" class="btn-primary">Post</button>
+            </div>
+        </section>
+
+        <div id="feedContainer">
+            </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
