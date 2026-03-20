@@ -3,28 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SimplePost | Login</title>
+    <title>SimplePost | Welcome</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .login-box { max-width: 400px; margin: 100px auto; padding: 30px; border: 1px solid var(--border); border-radius: 15px; text-align: center; }
-        .login-box h2 { margin-bottom: 20px; font-weight: 800; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 8px; outline: none; }
+        .auth-container { max-width: 400px; margin: 50px auto; padding: 30px; border: 1px solid var(--border); border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .tab-group { display: flex; margin-bottom: 25px; border-bottom: 1px solid var(--border); }
+        .tab { flex: 1; padding: 10px; cursor: pointer; text-align: center; font-weight: 700; color: var(--secondary); }
+        .tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border); border-radius: 10px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); }
+        .social-login { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .btn-google { background: #fff; color: #444; border: 1px solid #ddd; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <h2>SimplePost</h2>
-        <input type="email" id="email" placeholder="Email của bạn">
-        <input type="password" id="password" placeholder="Mật khẩu">
-        <button id="loginBtn" class="btn-primary" style="width: 100%; margin-top: 10px;">Đăng nhập / Đăng ký</button>
-        <p id="status" style="margin-top: 15px; font-size: 14px; color: red;"></p>
+    <div class="auth-container">
+        <h2 style="text-align: center; margin-bottom: 20px;">SimplePost</h2>
+        
+        <div class="tab-group">
+            <div class="tab active" id="tabLogin">Đăng nhập</div>
+            <div class="tab" id="tabRegister">Đăng ký</div>
+        </div>
+
+        <div id="loginForm">
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPass" placeholder="Mật khẩu">
+            <button class="btn-primary" id="doLogin" style="width: 100%; margin-top: 15px;">Vào ngay</button>
+        </div>
+
+        <div id="registerForm" class="hidden">
+            <input type="text" id="regName" placeholder="Họ và tên">
+            <input type="email" id="regEmail" placeholder="Email">
+            <input type="password" id="regPass" placeholder="Mật khẩu (ít nhất 6 ký tự)">
+            <button class="btn-primary" id="doRegister" style="width: 100%; margin-top: 15px;">Tạo tài khoản</button>
+        </div>
+
+        <div class="social-login">
+            <p style="text-align: center; font-size: 14px; color: var(--secondary);">Hoặc tiếp tục với</p>
+            <button class="btn-google btn-primary" id="googleLogin">G Google</button>
+        </div>
+        <p id="authMsg" style="color: red; font-size: 13px; text-align: center; margin-top: 15px;"></p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // DÁN CONFIG CỦA SAYHI VÀO ĐÂY
         const firebaseConfig = {
             apiKey: "AIzaSyAzn2X18AOgN59nc1O_RnHT2AJDRINYu7M",
             authDomain: "sayhiwithme-0000002.firebaseapp.com",
@@ -36,20 +61,42 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
 
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            
-            // Thử đăng nhập, nếu chưa có tài khoản thì tự tạo mới luôn cho tiện
-            signInWithEmailAndPassword(auth, email, pass)
-                .then(() => { window.location.href = 'index.html'; })
-                .catch(() => {
-                    createUserWithEmailAndPassword(auth, email, pass)
-                        .then(() => { window.location.href = 'index.html'; })
-                        .catch(err => { document.getElementById('status').innerText = "Lỗi: " + err.message; });
-                });
-        });
+        // Chuyển đổi Tab
+        document.getElementById('tabLogin').onclick = () => toggleTab('login');
+        document.getElementById('tabRegister').onclick = () => toggleTab('register');
+
+        function toggleTab(type) {
+            document.getElementById('loginForm').classList.toggle('hidden', type === 'register');
+            document.getElementById('registerForm').classList.toggle('hidden', type === 'login');
+            document.getElementById('tabLogin').classList.toggle('active', type === 'login');
+            document.getElementById('tabRegister').classList.toggle('active', type === 'register');
+        }
+
+        // Xử lý Đăng ký
+        document.getElementById('doRegister').onclick = async () => {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const pass = document.getElementById('regPass').value;
+            try {
+                const res = await createUserWithEmailAndPassword(auth, email, pass);
+                await updateProfile(res.user, { displayName: name });
+                window.location.href = 'index.html';
+            } catch (err) { document.getElementById('authMsg').innerText = err.message; }
+        };
+
+        // Xử lý Đăng nhập Email
+        document.getElementById('doLogin').onclick = () => {
+            signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPass').value)
+                .then(() => window.location.href = 'index.html')
+                .catch(err => document.getElementById('authMsg').innerText = "Sai tài khoản hoặc mật khẩu!");
+        };
+
+        // Xử lý Google
+        document.getElementById('googleLogin').onclick = () => {
+            signInWithPopup(auth, provider).then(() => window.location.href = 'index.html');
+        };
     </script>
 </body>
 </html>
