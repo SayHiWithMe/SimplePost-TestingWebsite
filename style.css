@@ -152,3 +152,38 @@ textarea {
 
 .action-btn:hover {
     color: var
+/* --- Style cho nút đăng nhập Google mới --- */
+.btn-google {
+    width: 100%;
+    background-color: #ffffff; /* Nền trắng chuẩn */
+    color: #1f1f1f; /* Chữ xám đậm */
+    border: 1px solid #dadce0; /* Viền xám nhẹ */
+    padding: 10px 24px;
+    border-radius: 30px; /* Bo tròn */
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex; /* Dùng Flex để căn giữa ảnh và chữ */
+    align-items: center;
+    justify-content: center;
+    gap: 12px; /* Khoảng cách giữa ảnh và chữ */
+    transition: background-color 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.btn-google:hover {
+    background-color: #f8f9fa; /* Màu nền khi hover */
+    border-color: #d2e3fc; /* Viền màu xanh nhạt khi hover */
+    box-shadow: 0 1px 3px 0 rgba(60,64,67,0.30), 0 4px 8px 3px rgba(60,64,67,0.15); /* Hiệu ứng đổ bóng */
+}
+
+.btn-google:active {
+    background-color: #f1f3f4; /* Màu nền khi click */
+}
+
+/* Định dạng kích thước cho logo Google */
+.google-icon {
+    width: 20px; /* Kích thước ảnh */
+    height: 20px;
+    display: block;
+}
