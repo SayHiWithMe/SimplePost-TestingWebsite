@@ -1,11 +1,10 @@
-/* 1. Biến màu sắc & Font chữ (Chuẩn Minimalist) */
 :root {
     --primary: #000000;
     --secondary: #536471;
+    --accent: #1d9bf0;
     --bg: #ffffff;
     --border: #eff3f4;
     --hover: #f7f7f7;
-    --accent: #1d9bf0; /* Màu xanh nhẹ cho các nút nếu cần */
 }
 
 * {
@@ -18,10 +17,9 @@
 body {
     background-color: var(--bg);
     color: var(--primary);
-    line-height: 1.6;
 }
 
-/* 2. Thanh điều hướng (Navbar) */
+/* Navbar */
 .navbar {
     position: sticky;
     top: 0;
@@ -29,120 +27,48 @@ body {
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     z-index: 1000;
-    padding: 12px 0;
 }
 
 .nav-content {
-    max-width: 1000px;
+    max-width: 600px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
+    padding: 12px 15px;
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: 900;
+    font-size: 1.25rem;
+    font-weight: 800;
     text-decoration: none;
     color: var(--primary);
-    letter-spacing: -1px;
 }
 
 .search-container input {
     background: #eff3f4;
     border: 1px solid transparent;
-    padding: 10px 20px;
-    border-radius: 25px;
-    width: 250px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    width: 180px;
     outline: none;
-    transition: 0.2s;
 }
 
-.search-container input:focus {
-    background: #fff;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(29, 155, 240, 0.1);
-}
-
-.nav-link {
-    text-decoration: none;
-    color: var(--primary);
-    font-weight: 600;
-    margin-right: 20px;
-}
-
-/* 3. Layout chính */
+/* Layout chính */
 .container {
     max-width: 600px;
-    margin: 20px auto;
-    padding: 0 15px;
+    margin: 0 auto;
 }
 
-/* 4. Khung đăng bài (Create Post) */
+/* Khung đăng bài */
 .create-post-card {
-    border: 1px solid var(--border);
-    padding: 20px;
-    border-radius: 16px;
-    margin-bottom: 20px;
-}
-
-textarea {
-    width: 100%;
-    border: none;
-    resize: none;
-    font-size: 1.25rem;
-    outline: none;
-    margin-bottom: 15px;
-    min-height: 80px;
-    color: var(--primary);
-}
-
-.card-footer {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    border-top: 1px solid var(--border);
-    padding-top: 15px;
-}
-
-.btn-primary {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 30px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-primary:hover {
-    opacity: 0.85;
-}
-
-.btn-secondary {
-    background: none;
-    border: 1px solid #cfd9de;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-/* 5. Bài đăng (Post Item) - FIX BUG AVATAR */
-.post {
-    padding: 20px;
+    padding: 15px;
     border-bottom: 1px solid var(--border);
-    transition: 0.2s;
-    cursor: pointer;
+    display: flex;
+    gap: 12px;
 }
 
-.post:hover {
-    background: var(--hover);
-}
-
-.default-avatar {
+.avatar-placeholder {
     width: 48px;
     height: 48px;
     background: #e1e8ed;
@@ -150,41 +76,79 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0; /* Không cho avatar bị bẹp khi nội dung quá dài */
+    color: #536471;
+    flex-shrink: 0;
+}
+
+.post-area {
+    flex: 1;
+}
+
+textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    font-size: 1.2rem;
+    outline: none;
+    min-height: 50px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Bài đăng (Post) */
+.post {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    transition: 0.2s;
+}
+
+.post:hover {
+    background: var(--hover);
 }
 
 .post-user {
-    font-weight: 800;
-    font-size: 15px;
-    margin-bottom: 4px;
+    font-weight: 700;
+    margin-right: 5px;
 }
 
 .post-content {
+    margin-top: 4px;
     font-size: 15px;
-    line-height: 1.5;
-    color: var(--primary);
-    word-wrap: break-word; /* Fix lỗi chữ dài tràn màn hình */
+    word-wrap: break-word;
 }
 
 .post-actions {
     display: flex;
-    gap: 40px;
+    justify-content: space-between;
+    max-width: 400px;
     margin-top: 12px;
     color: var(--secondary);
-    font-size: 13px;
 }
 
-.post-actions span:hover {
-    color: var(--accent);
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-/* 6. Mobile Responsive */
-@media (max-width: 500px) {
-    .search-container input {
-        width: 150px;
-    }
-    .logo {
-        font-size: 1.2rem;
-    }
-}
+.action-btn:hover {
+    color: var
