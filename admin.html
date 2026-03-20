@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>SimplePost | Admin Console</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Control Panel</h1>
+        <p>Danh sách bài viết hiện có trên hệ thống:</p>
+        <hr>
+        <div id="adminList"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAzn2X18AOgN59nc1O_RnHT2AJDRINYu7M",
+            authDomain: "sayhiwithme-0000002.firebaseapp.com",
+            databaseURL: "https://sayhiwithme-0000002-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "sayhiwithme-0000002",
+            storageBucket: "sayhiwithme-0000002.firebasestorage.app",
+            messagingSenderId: "330846125548",
+            appId: "1:330846125548:web:f308385a1aa261e06bd4c9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        onValue(ref(db, 'posts'), (snapshot) => {
+            const data = snapshot.val();
+            const list = document.getElementById('adminList');
+            list.innerHTML = '';
+            if (data) {
+                Object.keys(data).forEach(id => {
+                    const post = data[id];
+                    list.innerHTML += `
+                        <div style="border:1px solid #ddd; padding:10px; margin:10px 0; display:flex; justify-content:space-between;">
+                            <span><strong>@${post.user}:</strong> ${post.content}</span>
+                            <button onclick="deletePost('${id}')" style="background:red; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer;">Xóa bài</button>
+                        </div>
+                    `;
+                });
+            }
+        });
+
+        window.deletePost = (id) => {
+            if(confirm("Bạn có chắc muốn xóa bài này vĩnh viễn?")) {
+                remove(ref(db, `posts/${id}`));
+            }
+        };
+    </script>
+</body>
+</html>
