@@ -1,3 +1,12 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyAzn2X18AOgN59nc1O_RnHT2AJDRINYu7M",
+  authDomain: "sayhiwithme-0000002.firebaseapp.com",
+  projectId: "sayhiwithme-0000002",
+  storageBucket: "sayhiwithme-0000002.firebasestorage.app",
+  messagingSenderId: "330846125548",
+  appId: "1:330846125548:web:f308385a1aa261e06bd4c9",
+  databaseURL: "https://sayhiwithme-0000002-default-rtdb.asia-southeast1.firebasedatabase.app/"
+};
 // Mock data for initial view
 let posts = [
     {
